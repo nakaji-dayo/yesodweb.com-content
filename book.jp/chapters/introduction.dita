@@ -1,17 +1,82 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE concept PUBLIC "-//OASIS//DTD DITA Concept//EN" "concept.dtd">
-<concept id="introduction-1"><title>Introduction</title><conbody><p id="1-i1">Since web programming began, people have been trying to make the development process a more pleasant one. As a community, we have continually pushed new techniques to try and solve some of the lingering difficulties of security threats, the stateless nature of HTTP, the multiple languages (HTML, CSS, Javascript) necessary to create a powerful web application, and more.</p><p id="1-i2">Yesod attempts to ease the web development process by playing to the strengths of the Haskell programming language. Haskell's strong compile-time guarantees of correctness not only encompass types; referential transparency ensures that we don't have any unintended side effects. Pattern matching on algebraic data types can help guarantee we've accounted for every possible case. By building upon Haskell, entire classes of bugs disappear.</p><p id="1-i3">Unfortunately, using Haskell isn't enough. The web, by its very nature, is <i id="1-x1">not</i> type safe. Even the simplest case of distinguishing between an integer and string is impossible: all data on the web is transferred as raw bytes, evading our best efforts at type safety. Every app writer is left with the task of validating all input. I call this problem <term id="1-x2">the boundary issue</term>: as much as your application is type safe on the inside, every boundary with the outside world still needs to be sanitized.</p></conbody><concept id="type-safety-2"><title>Type Safety</title><conbody><p id="2-ts1">This is where Yesod comes in. By using high-level declarative techniques, you can specify the exact input types you are expecting. And the process works the other way as well: using a process of type-safe URLs, you can make sure that the data you send out is also guaranteed to be well formed.</p><p id="2-ts2">The boundary issue is not just a problem when dealing with the client: the same problem exists when persisting and loading data. Once again, Yesod saves you on the boundary by performing the marshaling of data for you. You can specify your entities in a high-level definition and remain blissfully ignorant of the details.</p></conbody></concept><concept id="concise-3"><title>Concise</title><conbody><p id="3-c1">We all know that there is a lot of boilerplate coding involved in web applications. Wherever possible, Yesod tries to use Haskell's features to save your fingers the work:</p><ul id="3-x1"><li id="3-x2">The forms library reduces the amount of code used for common cases by leveraging the Applicative type class.</li><li id="3-x3">Routes are declared in a very terse format, without sacrificing type safety.</li><li id="3-x4">Serializing your data to and from a database is handled automatically via code generation.</li></ul><p id="3-c2">In Yesod, we have two kinds of code generation. To get your project started, we provide a scaffolding tool to set up your file and folder structure. However, most code generation is done at compile time via meta programming. This means your generated code will never get stale, as a simple library upgrade will bring all your generated code up-to-date.</p><p id="3-c3">But for those who like to stay in control, and know exactly what their code is doing, you can always run closer to the compiler and write all your code yourself.</p></conbody></concept><concept id="performance-4"><title>Performance</title><conbody><p id="4-p1">Haskell's main compiler, the GHC, has amazing performance characteristics, and is improving all the time. This choice of language by itself gives Yesod a large performance advantage over other offerings. But that's not enough: we need an architecture designed for performance.</p><p id="4-p2">Our approach to templates is one example: by allowing HTML, CSS and JavaScript to be
-            analyzed at compile time, Yesod both avoids costly disk I/O at runtime and can optimize
-            the rendering of this code. But the architectural decisions go deeper: we use advanced
-            techniques such as conduits and builders in the underlying libraries to make sure our
-            code runs in constant memory, without exhausting precious file handles and other
-            resources. By offering high-level abstractions, you can get highly compressed and
-            properly cached CSS and JavaScript.</p><p id="4-p3">Yesod's flagship web server, Warp, is the fastest Haskell web server around. When these two pieces of technology are combined, it produces one of the fastest web application deployment solutions available.</p></conbody></concept><concept id="modular-5"><title>Modular</title><conbody><p id="5-m1">Yesod has spawned the creation of dozens of packages, most of which are usable in a context outside of Yesod itself. One of the goals of the project is to contribute back to the community as much as possible; as such, even if you are not planning on using Yesod in your next project, a large portion of this book may still be relevant for your needs.</p><p id="5-m2">Of course, these libraries have all been designed to integrate well together. Using the Yesod Framework should give you a strong feeling of consistency throughout the various APIs.</p></conbody></concept><concept id="a-solid-foundation-6"><title>A solid foundation</title><conbody><p id="6-s1">I remember once seeing a PHP framework advertising support for UTF-8. This struck me as
-            surprising: you mean having UTF-8 support isn't automatic? In the Haskell world, issues
-            like character encoding are already well addressed and fully supported. In fact, we
-            usually have the opposite problem: there are a number of packages providing powerful and
-            well-designed support for the problem. The Haskell community is constantly pushing the
-            boundaries finding the cleanest, most efficient solutions for each challenge.</p><p id="6-s2">The downside of such a powerful ecosystem is the complexity of choice. By using Yesod, you will already have most of the tools chosen for you, and you can be guaranteed they work together. Of course, you always have the option of pulling in your own solution.</p><p id="6-s3">As a real-life example, Yesod and Hamlet (the default templating language) use <apiname id="6-x1">blaze-builder</apiname> for textual content generation. This choice was made because blaze provides the fastest interface for generating UTF-8 data. Anyone who wants to use one of the other great libraries out there, such as <apiname id="6-x2">text</apiname>, should have no problem dropping it in.</p></conbody></concept><concept id="introduction-to-haskell-7"><title>Introduction to Haskell</title><conbody><p id="7-intro1">Haskell is a powerful, fast, type-safe, functional programming language. This book takes as an assumption that you are already familiar with most of the basics of Haskell. There are two wonderful books for learning Haskell, both of which are available for reading online:</p><ul id="7-x1"><li id="7-x2"><xref id="7-x3" href="http://learnyouahaskell.com" scope="external" format="html">Learn You a Haskell for Great Good!</xref></li><li id="7-x4"><xref id="7-x5" href="http://book.realworldhaskell.org/read" scope="external" format="html">Real World Haskell</xref></li></ul><p id="7-intro2">Yesod relies on a few features in Haskell that most introductory tutorials do not
-            cover. Though you will rarely need to understand how these work, it's always best to
-            start off with a good appreciation for what your tools are doing. These are covered in
-            the next chapter.</p></conbody></concept></concept>
+<concept id="introduction-1"><title>紹介</title>
+<conbody><p id="1-i1">
+WEBプログラミングが始まって以来、人々は開発プロセスをより快適な物にしようとして来ました。
+コミュニティとして私たちは、セキュリティの脅威やHTTPのステートレスな性質、パワフルなWEBアプリケーションを作るのに必要な複数の言語（HTML,CSS,JavaScript） と言った長引く困難を解決しようと新しい技術をプッシュし続けています。
+</p><p id="1-i2">
+Yesodは、Haskellの強みを活かすことで、WEB開発のプロセスに心の平穏をもたらします。
+Haskellの強力なコンパイルの保証は、型だけでなく、参照透明性は意図しない副作用を持っていないことも保証します。
+代数型でのパターンマッチングは、可能なすべてのケースを考慮にいれることを保証します。
+Haskellでの創造により、すべての分類のバグが消えるでしょう。
+</p><p id="1-i3">
+残念ながら、Haskellを使用するだけでは不十分です。
+WEBは、まさにその性質によって、タイプセーフでは<i id="1-x1">ありません</i>。
+最も単純なケースとして、文字列と整数を区別することもできません。WEB上のすべてのデータは生のバイト列として転送されます。私たちの片安全の努力は回避されてしまいます。
+すべてのアプリ開発者は、すべての入力を検証するタスクを残されています。
+私はこれを <term id="1-x2">境界問題</term>と呼んでいます。アプリケーションが内側で出来るだけ型安全であるために、外の世界との境界はすべて消毒する必要があります。
+</p></conbody><concept id="type-safety-2"><title>型安全</title>
+<conbody><p id="2-ts1">
+Yesodが来ましたよ。
+高度な宣言的なテクニックを使用することで、入力の型を正確に指定することができます。
+そして、プロセスは、他の用意方法で動作します。型安全URLプロセスを使用して、あなたが出力・送信するデータも正しくフォーマットされることが保証されます。
+</p><p id="2-ts2">
+境界問題はクライアントとの境界に限りません。データの永続化時にも問題は存在しています。
+ここで再び、Yesodはデータのマーシャリングをすることで境界からあなたを守ります。
+あなたはは細部まで知らずとも、ハイレベルの定義でエンティティを指定することができます。
+</p></conbody></concept>
+<concept id="concise-3"><title>簡潔</title><conbody><p id="3-c1">
+すべてのアプリケーションについて定型的なコーディングがあることを、我々は知っています。
+Yesodは、Haskellの機能を使用し、可能な限り、あなたの指をそのような仕事から救おうとしています：
+</p><ul id="3-x1">
+<li id="3-x2">フォームライブラリは、アプリカティブ型クラスを活用することで、一般的なケースのコード量を減らします。
+</li><li id="3-x3">ルーティングは、型安全性を犠牲にすることなく、非常に簡潔な形式で宣言されています。
+</li><li id="3-x4">データベースとのデータのやり取りは、生成されたコードを介して、自動的に処理されます。
+</li></ul><p id="3-c2">
+Yesodでは、２種類のコード生成があります。
+プロジェクトを開始するためには、ファイルとフォルダ構造をセットアップするスキャッフォルディングツールがあります。しかしながら、ほとんどのコード生成はメタプログラミングによってコンパイル時に行われます。
+このことは、単純なライブラリのアップデートにより生成されたコードもアップデートされ、生成されたコードが腐ることがないことを意味します。
+</p><p id="3-c3">
+しかし、制御下に置きたい人のために、そして正確にコードが何をしているか知るために、いつでもrun closer to the compilerし、すべてのコードを自分で書くことができます
+</p></conbody></concept>
+<concept id="performance-4"><title>パフォーマンス</title><conbody>
+<p id="4-p1">
+Haskellな主なコンパイラGHCは驚くべきパフォーマンス特性を持っていて、すべての時間を改善します。
+この単独の言語選択は、パフォーマンスでの他の製品を超えるアドバンテージをYesodに与えます。
+しかしそれだけではなく、パフォーマンスが出るように設計されたアーキテクチャが必要です。
+</p><p id="4-p2">
+我々のテンプレートへのアプローチが一例です。HTMLとCSS,JavaScriptはコンパイル時に解析され、Yesodは実行時の高コストなディスクIOを避ける事と、このコードのレンダリングを最適化することの両方をしています。
+しかし、アーキテクチャの決定は奥深く、貴重なファイルハンドルや他のリソースを消費せず、一定のメモリ使用量でコードが動くよう、基盤ライブラリでConduitやBuilderといった高度な技術を使用している。
+ハイレベルな抽象化を提供することで、高圧縮され適切にキャシュされたCSSとJavaScriptを得ることができます。
+</p><p id="4-p3">
+Yesodの主力のWEBサーバー、その名もWarpは最速のHaskellWEBサーバーです。
+これら２つの技術が揃った時、WEBアプリケーションデプロイの最速ソリューションとなります。
+</p></conbody></concept>
+<concept id="modular-5"><title>モジューラ</title>
+<conbody><p id="5-m1">
+Yesodは数十のパッケージを生み出してきた、そのうち大半は、Yesod自体とは関係ない所で使用可能です。プロジェクトの１つのゴールはできるだけ多くコミュニティに貢献することです。なので、あなたがもし次のプロジェクトでYesodを使う予定がないとしても、この本の大部分はあなたのニーズに関係しているかもしれません。
+</p><p id="5-m2">
+もちろんこれらのライブラリは全て上手く結合できるように設計されています。Yesodを使うと様々なAPI全体の一貫性を強く感じることでしょう。
+</p></conbody></concept>
+<concept id="a-solid-foundation-6"><title>強固な基盤</title><conbody><p id="6-s1">
+私はPHPのフレームワークがUTF-8をサポートしたことを宣伝していたことを覚えています。
+これには驚くべきことだという印象を受けた。UTF-8のサポートは自動で行われなかったという意味ですか？Haskellの世界では文字エンコーディングのような問題は十分に対処され、完全にサポートされています。
+実際に我々は、たいてい逆の問題を抱えている。その問題のための協力でよく設計されたパッケージが数多くあります。Haskellコミュニティは、クリーンであり効果的な解決策を見出す線を引こうと常に挑戦しています。
+</p><p id="6-s2">
+このような強力なエコシステムの欠点は、選択の複雑さです。
+Yesodを使うことで、あなたは殆どのツールを選択できていて、それらが一緒に動くことが保証されています。
+もちろん、いつでも自分自身の解決策を持ってくることもできます。
+</p><p id="6-s3">
+実例として、YesodとHamlet(デフォルトのテンプレート言語)はテキストコンテンツの生成のために<apiname id="6-x1">blaze-builder</apiname>を使っています。この選択はblaze-builderがUTF-8のデータを生成するのに最速のインターフェースを提供するのでなされた。もし、他に<apiname id="6-x2">text</apiname>など偉大なライブラリを使いたいという人がいれば、それを使うのに何も問題ありません。
+</p></conbody></concept>
+<concept id="introduction-to-haskell-7"><title>Haskellの紹介</title>
+<conbody><p id="7-intro1">
+Haskellはパワフルで高速、型安全な関数型プログラミング言語です。
+この本は、すでにHaskellの基礎の殆どに精通していることを前提としています。
+Haskellを学ぶのに素晴らしい２つの本があり、それらはオンラインで読むことができます：
+ There are two wonderful books for learning Haskell, both of which are available for reading online:
+</p><ul id="7-x1"><li id="7-x2"><xref id="7-x3" href="http://learnyouahaskell.com" scope="external" format="html">Learn You a Haskell for Great Good!</xref></li><li id="7-x4"><xref id="7-x5" href="http://book.realworldhaskell.org/read" scope="external" format="html">Real World Haskell</xref></li></ul><p id="7-intro2">
+Yesodはほとんどの入門チュートリアルではカバーしていないHaskellの機能に依存しています。
+あなたは殆どの場合それらがどのように動作しているか理解する必要はありませんが、ツールがやっていることをよく理解しようとし始めるには最善の方法です。
+これについて次の章で見て行きましょう。
+</p></conbody></concept></concept>
