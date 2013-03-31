@@ -4,7 +4,7 @@
 
 <map id="book" title="Yesod Web Framework Book">
     <topichead navtitle="Basics">
-        <topicref href="chapters/introduction.dita" navtitle="Introduction">
+        <topicref href="chapters/introduction.dita" navtitle="紹介">
         </topicref>
         <topicref href="chapters/haskell.dita" navtitle="Haskell">
         </topicref>
